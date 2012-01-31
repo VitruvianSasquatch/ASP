@@ -5,20 +5,36 @@ function love.load()
 	config = config:split("\n")
 	dimx = tonumber(config[1] - "dimx = ")
 	dimy = tonumber(config[1] - "dimy = ")
-	--img = love.image.newImageData(, )
+	lefttool = "pencil" --also can have "harderaser", "softeraser", "brush", "picker", "bucket", "line", etc
+	righttool = "harderaser"
+	ctrltool = "picker"
 	state = "draw" --can have "load", "save" and "option" also
 	scrollspeed = 1
+	zoom = 1
 	newfile(dimx,dimy)
 end
 
 function newfile(width,height)
-	--initialise new image of width width and height height
 	dimx = width
 	dimy = height
+	image = love.image.newImageData(dimx, dimy)
 	zoom = 1
 	vx = 0--viewport x
 	vy = 0--viewport y
 	selectedcolour = {0,0,0,255}
+end
+
+function save(filepath, filename)
+	love.filesystem.write(filename, image:encode('png'), all)
+end
+
+function open(filepath)
+	imagedata = love.filesystem.read(filepath, all)
+	image = love.image.newImageData
+	dimx = (image):getWidth()
+	dimy = (image):getHeight()
+	zoom = 1
+	state = "draw"
 end
 
 -- old function
