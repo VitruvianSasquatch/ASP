@@ -66,15 +66,12 @@ end
 function love.update(dt)
 	mx = love.mouse.getX()-64
 	my = love.mouse.getY()
-	--xinimg = 
-	--yinimg = 
+	xinimg = math.floor((mx-vx)/zoom)
+	yinimg = math.ceil((my-vy)/zoom)
 	if love.mouse.isDown("l") then
 		if lefttool == "pencil" then pencil(xinimg, yinimg) end
 		if lefttool == "harderaser" then harderaser(xinimg, yinimg) end
 		updateimage()
-		--edit the image at the mouse location to the selected colour
-		--x value = math.ceil((mx-vx)/zoom)
-		--y value = math.ceil((my-vy)/zoom)
 	end
 	if love.mouse.isDown("r") then
 		if righttool == "pencil" then pencil(xinimg, yinimg) end
@@ -98,7 +95,7 @@ end
 
 function love.draw()
 	love.graphics.rectangle("line",64,0,dimx*zoom,dimy*zoom)
-	love.graphics.draw(imagefile, 64, 0, 0, zoom, zoom)
+	love.graphics.draw(imagefile, 64+vx, vy, 0, zoom, zoom)
 	--draw imagedata at 64,0,0,zoom,zoom
 end
 
