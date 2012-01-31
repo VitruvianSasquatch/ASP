@@ -12,6 +12,8 @@ function love.load()
 	righttool = "harderaser"
 	ctrltool = "picker"
 	drawcolour = {0, 0, 0, 255}
+	prevx = nil --first coords for line drawing
+	prevy = nil
 	state = "draw" --can have "load", "save" and "option" also
 	scrollspeed = 1
 	zoom = 1
@@ -43,12 +45,19 @@ function open(filepath)
 	updateimage()
 end
 
-function pencil(x, y)
-	image:setPixel(x, y, drawcolour[1], drawcolour[2], drawcolour[3], drawcolour[4])
+function pencil(x, y, colour)
+	image:setPixel(x, y, colour[1], colour[2], colour[3], colour[4])
 end
 
 function harderaser(x, y)
 	image:setPixel(x, y, 0, 0, 0, 0)
+end
+
+function line(x1, y1, x2, y2, colour)
+	local m = (y1-y2)/(x1-x2)
+	for x=x1-1, x2 do
+		image:setPixel(x1+x, x1+math.floor(x*m), colour[1], colour[2], colour[3], colour[4])
+	end
 end
 
 -- old function
@@ -69,12 +78,15 @@ function love.update(dt)
 	xinimg = math.floor((mx-vx)/zoom)
 	yinimg = math.ceil((my-vy)/zoom)
 	if love.mouse.isDown("l") then
-		if lefttool == "pencil" then pencil(xinimg, yinimg) end
+		if lefttool == "pencil" then pencil(xinimg, yinimg, drawcolour) end
 		if lefttool == "harderaser" then harderaser(xinimg, yinimg) end
+		if (lefttool == "line" or love.keyboard.isDown("lshift")) and prevx ~= nil and prevy ~=nil then line(prevx, prevy, xinimg, yinimg, drawcolour) end
+		prevx = xinimg
+		prevy = yinimg
 		updateimage()
 	end
 	if love.mouse.isDown("r") then
-		if righttool == "pencil" then pencil(xinimg, yinimg) end
+		if righttool == "pencil" then pencil(xinimg, yinimg, drawcolour) end
 		if righttool == "harderaser" then harderaser(xinimg, yinimg) end
 		updateimage()
 		--edit the image to {0,0,0,0}
