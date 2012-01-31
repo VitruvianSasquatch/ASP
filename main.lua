@@ -55,8 +55,18 @@ end
 
 function line(x1, y1, x2, y2, colour)
 	local m = (y1-y2)/(x1-x2)
-	for x=x1-1, x2 do
-		image:setPixel(x1+x, x1+math.floor(x*m), colour[1], colour[2], colour[3], colour[4])
+	if m <= 1 then
+		if x1<x2 then
+			for x=0, x2-x1 do
+				image:setPixel(x1+x, y1+math.floor(x*m), colour[1], colour[2], colour[3], colour[4])
+			end
+		end
+	else
+		if y1<y2 then
+			for y=0, y2-y1 do
+				image:setPixel(x1+math.floor(y/m), y1+y, colour[1], colour[2], colour[3], colour[4])
+			end
+		end
 	end
 end
 
