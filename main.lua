@@ -4,7 +4,7 @@ function love.load()
 	config = love.filesystem.read("config.txt", all)
 	config = config:split("\n")
 	dimx = tonumber(config[1] - "dimx = ")
-	dimy = tonumber(config[1] - "dimy = ")
+	dimy = tonumber(config[2] - "dimy = ")
 	--img = love.image.newImageData(, )
 	state = "draw" --can have "load", "save" and "option" also
 	scrollspeed = 1
@@ -54,6 +54,7 @@ function correctviewport() --haven't tested this yet, but hopefully it'll work
 end
 
 function love.draw()
+	love.graphics.rectangle("line",64,0,dimx*zoom,dimy*zoom)
 	--draw imagedata at 64,0,0,zoom,zoom
 end
 
