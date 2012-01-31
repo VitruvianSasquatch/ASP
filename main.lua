@@ -4,10 +4,14 @@ function love.load()
 	config = love.filesystem.read("config.txt", all)
 	config = config:split("\n")
 	dimx = tonumber(config[1] - "dimx = ")
-	dimy = tonumber(config[1] - "dimy = ")
+	dimy = tonumber(config[2] - "dimy = ")
+	love.graphics.setBackgroundColor(200, 200, 200, 255)
+	xinimg = math.floor(dimx/2)
+	yinimg = math.floor(dimy/2)
 	lefttool = "pencil" --also can have "harderaser", "softeraser", "brush", "picker", "bucket", "line", etc
 	righttool = "harderaser"
 	ctrltool = "picker"
+	drawcolour = {0, 0, 0, 255}
 	state = "draw" --can have "load", "save" and "option" also
 	scrollspeed = 1
 	zoom = 1
@@ -37,6 +41,14 @@ function open(filepath)
 	state = "draw"
 end
 
+function pencil(x, y)
+	image:setPixel(x, y, drawcolour[1], drawcolour[2], drawcolour[3], drawcolour[4])
+end
+
+function harderaser(x, y)
+	image:setPixel(x, y, 0, 0, 0, 0)
+end
+
 -- old function
 --function editimg(colour)
 --	if mx > 64 and mx < dimx*zoom+64 and my > 0 and my < dimy*zoom then
@@ -47,12 +59,18 @@ end
 function love.update(dt)
 	mx = love.mouse.getX()-64
 	my = love.mouse.getY()
+	--xinimg = 
+	--yinimg = 
 	if love.mouse.isDown("l") then
+		if lefttool == "pencil" then pencil(xinimg, yinimg) end
+		if lefttool == "harderaser" then harderaser(xinimg, yinimg) end
 		--edit the image at the mouse location to the selected colour
 		--x value = math.ceil((mx-vx)/zoom)
 		--y value = math.ceil((my-vy)/zoom)
 	end
 	if love.mouse.isDown("r") then
+		if righttool == "pencil" then pencil(xinimg, yinimg) end
+		if righttool == "harderaser" then harderaser(xinimg, yinimg) end
 		--edit the image to {0,0,0,0}
 	end
 	if love.keyboard.isDown("left") then vx = vx - scrollspeed end
@@ -70,6 +88,7 @@ function correctviewport() --haven't tested this yet, but hopefully it'll work
 end
 
 function love.draw()
+	love.graphics.draw(love.graphics.newImage(image), 64, 0, 0, zoom, zoom)
 	--draw imagedata at 64,0,0,zoom,zoom
 end
 
