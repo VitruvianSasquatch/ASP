@@ -2,10 +2,13 @@ require("strong")
 
 function love.load()
 	config = love.filesystem.read("config.txt", all)
+	config = config:split("\n")
+	dimx = tonumber(config[1] - "dimx = ")
+	dimy = tonumber(config[1] - "dimy = ")
 	--img = love.image.newImageData(, )
 	state = "draw" --can have "load", "save" and "option" also
 	scrollspeed = 1
-	newfile(32,32)
+	newfile(dimx,dimy)
 end
 
 function newfile(width,height)
@@ -40,7 +43,7 @@ function love.update(dt)
 	if love.keyboard.isDown("right") then vx = vx + scrollspeed end
 	if love.keyboard.isDown("up") then vy = vy - scrollspeed end
 	if love.keyboard.isDown("down") then vy = vy + scrollspeed end
-	correctviewport()
+	--correctviewport()
 end
 
 function correctviewport() --haven't tested this yet, but hopefully it'll work
