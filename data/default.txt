@@ -1,4 +1,3 @@
 dimx = 64
 dimy = 64
-colourmode = "rgb"
 deltaalpha = 20
