@@ -1,3 +1,5 @@
+require("strong")
+
 function love.load()
 	config = love.filesystem.read("config.txt", all)
 	--img = love.image.newImageData(, )
@@ -11,8 +13,8 @@ function newfile(width,height)
 	dimx = width
 	dimy = height
 	zoom = 1
-	vx = 0 --viewport x
-	vy = 0 -- viewport y
+	vx = 0--viewport x
+	vy = 0--viewport y
 	selectedcolour = {0,0,0,255}
 end
 
@@ -24,7 +26,7 @@ end
 --end
 
 function love.update(dt)
-	mx = love.mouse.getX()+64
+	mx = love.mouse.getX()-64
 	my = love.mouse.getY()
 	if love.mouse.isDown("l") then
 		--edit the image at the mouse location to the selected colour
