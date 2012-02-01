@@ -1,5 +1,17 @@
 require("strong")
 
+function xor(stat1, stat2)
+	if not (stat1 and stat2) or stat1 and stat2 then
+		return false
+	else
+		return true
+	end
+end
+
+function round(float)
+	if float - math.floor(float) >= 0.5 then return math.floor(float)+1 else return math.floor(float) end
+end
+
 function love.load()
 	config = love.filesystem.read("config.txt", all)
 	config = config:split("\n")
@@ -55,16 +67,24 @@ end
 
 function line(x1, y1, x2, y2, colour)
 	local m = (y1-y2)/(x1-x2)
-	if m <= 1 then
-		if x1<x2 then
+	if m <= 1 and m>= -1 then --|deltax| >= |deltay| (iternate x values)
+		if x1 <= x2 then --going right (x++)
 			for x=0, x2-x1 do
-				image:setPixel(x1+x, y1+math.floor(x*m), colour[1], colour[2], colour[3], colour[4])
+				image:setPixel(x1+x, y1+round(x*m), colour[1], colour[2], colour[3], colour[4])
+			end
+		else --going left (x--)
+			for x=0, x2-x1, -1 do
+				image:setPixel(x1+x, y1+round(x*m), colour[1], colour[2], colour[3], colour[4])
 			end
 		end
-	else
-		if y1<y2 then
+	else --ergo, |deltax| <= |deltay| (iternate y values)
+		if y1 <= y2 then --going down (y++)
 			for y=0, y2-y1 do
-				image:setPixel(x1+math.floor(y/m), y1+y, colour[1], colour[2], colour[3], colour[4])
+				image:setPixel(x1+round(y/m), y1+y,  colour[1], colour[2], colour[3], colour[4])
+			end
+		else --going up (y--)
+			for y=0, y2-y1, -1 do
+				image:setPixel(x1+round(y/m), y1+y, colour[1], colour[2], colour[3], colour[4])
 			end
 		end
 	end
@@ -90,7 +110,7 @@ function love.update(dt)
 	if love.mouse.isDown("l") then
 		if lefttool == "pencil" then pencil(xinimg, yinimg, drawcolour) end
 		if lefttool == "harderaser" then harderaser(xinimg, yinimg) end
-		if (lefttool == "line" or love.keyboard.isDown("lshift")) and prevx ~= nil and prevy ~=nil then line(prevx, prevy, xinimg, yinimg, drawcolour) end
+		if (lefttool == "line" or (love.keyboard.isDown("lshift"))) and prevx ~= nil and prevy ~=nil then line(prevx, prevy, xinimg, yinimg, drawcolour) end
 		prevx = xinimg
 		prevy = yinimg
 		updateimage()
